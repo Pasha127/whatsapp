@@ -39,37 +39,19 @@ export const getMeWithThunk = async () =>{
   const baseURL = process.env.REACT_APP_SERVER_URL
     const options = {
       method: 'GET' ,
-      credentials:"include",
-       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',         
-        } 
+      credentials:"include"
       };      
       const baseEndpoint = `${baseURL}/user/me`
       /* console.log("fetch blogs") */
       const response = await fetch(baseEndpoint, options);
+      console.log("test me", response);
       if (response.ok) {
         const data = await response.json()
-        setUserInfo(data);            
+        console.log("test resp", data);
+        // setUserInfo(data);            
           } else {
-             const options2 = {
-              method: 'POST' ,
-              credentials:"include",
-               headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',         
-                } 
-              };      
-              const baseEndpoint2 = `${baseURL}/user/refreshTokens`
-              const response2 = await fetch(baseEndpoint2, options2);
-              if (response2.ok) {
-                const data2 = await response2.json()
-                setUserInfo(data2);             
-                  } else {
-                    console.log("Error fetching me");
                     logOutWithThunk()
             }             
-    }
 }
 
 export const logOutWithThunk = async () =>{

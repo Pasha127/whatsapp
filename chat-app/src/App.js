@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 const mapStateToProps = state => {
   return {
-  user: state.userinfo
+  user: state.userInfo
   };
 };
  const mapDispatchToProps = dispatch => {

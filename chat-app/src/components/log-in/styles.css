@@ -59,6 +59,7 @@
   }
 
   .oauth-button{
+    transform: translateY(40px);
     background-color: #ffffff;
     margin-inline: 10px;  
     height: 50px;
