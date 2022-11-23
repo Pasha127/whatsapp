@@ -210,7 +210,7 @@ const handleLogIn = async (e) =>{ //move whole function  to actions
       </Form>}
     </Container>
     <div className="d-flex flex-wrap justify-content-center mt-5">
-    <a href="http://localhost:3000/authors/googleLogin">
+    <a href="http://localhost:3001/user/googleLogin">
     <Button
             className="oauth-button"
             size="lg"
