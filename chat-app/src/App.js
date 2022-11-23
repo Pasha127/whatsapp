@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "./components/navbar/BlogNavbar";
+import NavBar from "./components/navbar/GeneralNavbar";
 import Footer from "./components/footer/Footer";
-import NewBlogPost from "./views/new/New";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LogIn from "./components/log-in/logIn";
 import SplashNavBar from "./components/navbar/SplashNavbar";
 import Chat from "./components/chat/Chat";
 import { getMeWithThunk } from "./redux/actions";
 import { connect } from "react-redux";
+import 'bootstrap/dist/css/bootstrap.min.css';
 const mapStateToProps = state => {
   return {
   user: state.userinfo
@@ -30,12 +30,12 @@ useEffect(()=>{
 
   return (
     <Router>
-      {props.user._id?<NavBar/>:<SplashNavBar />}
+      {props.user?<NavBar/>:<SplashNavBar />}
       <Routes>
-        <Route path="/" exact element={props.user._id?  <Chat  />:<LogIn />} />
-        <Route path="/new" element={props.user._id? <NewBlogPost/>:<LogIn />} />
+        <Route path="/" exact element={props.user?  <Chat />:<LogIn />} />
+        {/* <Route path="/new" element={props.user._id? <AnotherPage/>:<LogIn />} /> */}
       </Routes>
-      {props.user._id && <Footer />}
+      {props.user && <Footer />}
     </Router>
   );
 }

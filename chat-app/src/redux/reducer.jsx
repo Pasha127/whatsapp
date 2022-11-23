@@ -1,6 +1,6 @@
-import { initialState } from "./store/store";
+import { initialState } from "./store";
 import {LOADING,SEARCH,SET_USER_INFO,SET_CHATS,SET_ACTIVE_CHAT,SET_HISTORY,NEW_MESSAGE } from "./actions";
-const reducer = (state = initialState.user, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
       case LOADING:
         return {

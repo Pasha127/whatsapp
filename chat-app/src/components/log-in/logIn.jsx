@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Button, Container, Form, Row,Image } from "react-bootstrap";
-import "react-quill/dist/quill.snow.css";
-import "./styles.css";
+import "./styles.css"
 import {BsFillImageFill,BsPersonBoundingBox } from "react-icons/bs";
 
 const LogIn = (props) => {
@@ -24,7 +23,7 @@ const postAvatar = async (id) =>{
     credentials:"include",    
     body: formData
     };
-    const baseEndpoint = `${baseURL}/blogPosts/images/${id}/avatar`
+    const baseEndpoint = `${baseURL}/user/avatar`///must add cloudinary in backend
     try {    
       const response = await fetch(baseEndpoint, options);
       if (response.ok) {           
@@ -96,7 +95,7 @@ const handleSubmit = (e) => {
     postNewAuthor(postObj);
   }
 
-const handleLogIn = async (e) =>{
+const handleLogIn = async (e) =>{ //move whole function  to actions
     e.preventDefault()
     const postObj = {password,email}
     const options = {        
@@ -112,7 +111,7 @@ const handleLogIn = async (e) =>{
           if (response.ok) {           
             const data = await response.json()
             console.log(data._id); 
-            props.setLoggedIn(true)        
+            /* props.setLoggedIn(true)    */  //switch to redux   
             alert('Successfully logged in!')
          } else {
            alert('Error fetching results')
@@ -135,15 +134,15 @@ const handleLogIn = async (e) =>{
       {wantLogIn? 
       <div className="log-in-box">
         <Form>
-        <Form.Group controlId="Email" className="mt-1 ml-5 col-12">
+        <Form.Group controlId="Email" className="mt-1 col-12">
             <Form.Label>Email</Form.Label>
           <Form.Control size="lg" placeholder="Email"onChange={(e)=>(setEmail(e.target.value))} />
             </Form.Group>
-            <Form.Group controlId="Password" className="mt-1 ml-5 col-12">
+            <Form.Group controlId="Password" className="mt-1  col-12">
           <Form.Label>Password</Form.Label>
           <Form.Control size="lg" type="password" placeholder="Password"onChange={(e)=>(setPassword(e.target.value))} />
           </Form.Group> 
-            <Form.Group className="mt-3 ml-5 col-12 justify-content-around d-flex">
+            <Form.Group className="mt-3  col-12 justify-content-around d-flex">
         <Button variant="outline-dark"
         onClick={(e) => handleLogIn(e)}
         type="submit"
@@ -172,27 +171,27 @@ const handleLogIn = async (e) =>{
                           onChange={(e)=>{readAvatar(e)}}></input>
                           </div>
                           </div>
-        <Form.Group controlId="First-Name" className="mt-1 ml-5 col-12">
+        <Form.Group controlId="First-Name" className="mt-1   col-12">
           <Form.Label>First Name</Form.Label>
           <Form.Control size="lg" placeholder="First Name"onChange={(e)=>(setFirstName(e.target.value))} />
         </Form.Group>         
-        <Form.Group controlId="Last-Name" className="mt-1 ml-5 col-12">
+        <Form.Group controlId="Last-Name" className="mt-1  col-12">
           <Form.Label>Last Name</Form.Label>
           <Form.Control size="lg" placeholder="Last Name"onChange={(e)=>(setLastName(e.target.value))} />
         </Form.Group>         
-        <Form.Group controlId="Username" className="mt-1 ml-5 col-12">
+        <Form.Group controlId="Username" className="mt-1 col-12">
           <Form.Label>Username</Form.Label>
           <Form.Control size="lg" placeholder="Username"onChange={(e)=>(setUsername(e.target.value))} />
         </Form.Group>         
-        <Form.Group controlId="Password" className="mt-1 ml-5 col-12">
+        <Form.Group controlId="Password" className="mt-1  col-12">
           <Form.Label>Password</Form.Label>
           <Form.Control size="lg" type="password" placeholder="Password"onChange={(e)=>(setPassword(e.target.value))} />
           </Form.Group>         
-        <Form.Group controlId="email" className="mt-1 ml-5 col-12">
+        <Form.Group controlId="email" className="mt-1  col-12">
           <Form.Label>E-mail</Form.Label>
           <Form.Control size="lg" placeholder="E-mail"onChange={(e)=>(setEmail(e.target.value))} />
           </Form.Group>         
-        <Form.Group className="mt-3 ml-5 col-10">
+        <Form.Group className="mt-3  col-10">
         <Button type="reset" size="lg" variant="outline-dark" onClick={(e) => setWantLogIn(true)}>
         Back
           </Button>

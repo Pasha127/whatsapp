@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {Container,Row,Col,Form,FormControl,ListGroup,Button} from "react-bootstrap";
 import {io} from "socket.io-client";
-import {Message,User} from "../../types/index";
+
 
 const socket = io("https://cog-chat.herokuapp.com/", {transports:["websocket"]})
 console.log()
@@ -10,8 +10,8 @@ const Chat = () => {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
-  const [chatHistory, setChatHistory] = useState<Message[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [chatHistory, setChatHistory] = useState([]);
 
   useEffect(() => {
   socket.on("welcome", welcomeMessage => {
@@ -38,7 +38,7 @@ const Chat = () => {
     }
 
   const sendMessage = () => {
-    const newMessage: Message = {
+    const newMessage= {
       sender: username,
       text: message,
       createdAt: new Date().toLocaleString("en-US"),

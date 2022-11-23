@@ -1,5 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage';
+import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import reducer from './reducer';
 
@@ -7,7 +6,7 @@ export const initialState = {
   isLoading: false,
   query: "",
   userInfo: {
-    _id: null,
+    _id: "",
     name: "",
     email: "",
     avatar: ""
