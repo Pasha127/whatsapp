@@ -36,7 +36,7 @@ const Chat = (props) => {
 
   useEffect(()=>{
     console.log("chatHistory1", chatHistory)
-    setChatHistory(props.activeChat.messages || ['It was null','It was null','It was null','It was null'])
+    setChatHistory(props.activeChat.messages || ['nodata'])
     console.log("chatHistory2", chatHistory)
   },[props.activeChat]);
 
@@ -99,7 +99,8 @@ const Chat = (props) => {
           {/* MIDDLE AREA: CHAT HISTORY */}
           <ListGroup> {chatHistory.map((element, i) => (
               <ListGroup.Item key={i}>
-                <strong>{element.sender} </strong> | {element.content.text} at{" "}
+                {console.log(element.content  && element.content.text)}
+                <strong>{element.sender} </strong> | {element.content && element.content.text} at{" "}
                 {new Date(element.createdAt).toLocaleTimeString("en-US")}
               </ListGroup.Item>
             ))}</ListGroup>
