@@ -1,4 +1,12 @@
-.blog-author {
+.chat-head {
   width: 40px;
   height: 40px;
+}
+.tab-body{
+  border: 1px solid black;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }

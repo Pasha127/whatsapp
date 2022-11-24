@@ -2,34 +2,46 @@ import React from "react";
 import { Col, Image, Row } from "react-bootstrap";
 import "./styles.css";
 import { connect } from "react-redux";
+
 const mapStateToProps = state => {
   return {
-  user: state.userInfo
+  user: state.userInfo,
+  history: state.chats.list
   };
 };
  const mapDispatchToProps = dispatch => {
   return {
-   /*  getMe: ()=> {
-      dispatch(getMeWithThunk());
-    }      */
+    /* getHistory: ()=> {
+      dispatch(getHistoryWithThunk());
+    }  */
   };  
 }; 
 
 
-const userMini = (props) => {
-  const { name, _id, avatar } = props;
+const UserMini = (props) => {
+  const chatPreview =() =>{
+    const relevantChat = props.history.find(chat => {
+      return chat.members.some(member=>{
+        return member._id === props.person._id
+      })
+    })
+    const messagePreview = relevantChat.messages[relevantChat.messages.length - 1].content.text;
+    console.log("userMini: ", messagePreview)
+    return messagePreview 
+  }
   
+
   return (
-    <Row>
+    <Row className="tab-body m-0">
       <Col xs={2}>
-        <Image className="blog-author" src={avatar} roundedCircle />
+        <Image className="chat-head" src={props.person.avatar} roundedCircle />
       </Col>
       <Col>
-        <div>by</div>
-        <h6>{name}</h6>
+        <h6 className="m-0">{props.person.email.split("@")[0]}</h6>
+         <div className="chat-preview">"{`${chatPreview()}`}"</div> 
       </Col>
     </Row>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(userMini);
+export default connect(mapStateToProps, mapDispatchToProps)(UserMini);

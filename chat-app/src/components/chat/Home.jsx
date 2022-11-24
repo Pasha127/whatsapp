@@ -38,10 +38,11 @@ const Home = (props) => {
     return (
         <Container fluid className="home-container m-0" >
         <div>
+            <div>{console.log(props.history)}</div>
             <div className="friendlist">            
                 {props.history.map(chat =>{
                 const person = chat.members.find(member => member._id !== props.user._id) 
-                return (<UserMini key={`${person._id} chat`} name={person.username} avatar={person.avatar} _id={person._id} />)}
+                return (<UserMini key={`${person._id} chat`} person={person} />)}
                 )}  
                 </div>
             <div className="chat-space">

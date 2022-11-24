@@ -111,7 +111,7 @@ const Chat = (props) => {
           {/* ONLINE USERS SECTION */}
           <div className="mb-3">Connected users:</div>
           {onlineUsers.length === 0 && (
-            <ListGroup.Item>Log in to check who's online!</ListGroup.Item>
+            <ListGroup.Item>ERROR - Please Refresh</ListGroup.Item>
           )}
           <ListGroup>
             {onlineUsers.map(user => (
