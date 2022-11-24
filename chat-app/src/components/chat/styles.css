@@ -1,0 +1,29 @@
+.home-container{
+    width: 100vw;
+    height: calc( 100vh - 80px);
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+
+    
+}
+.friendlist{
+    display: flex;
+    position: absolute;
+    border:1px solid grey;
+   
+    width:250px;
+    height: 100%;
+    left:0
+}
+.chat-space{
+    display: flex;
+    position: absolute;
+    border:1px solid grey;
+
+    right:0;
+    width: calc(100vw - 249px);
+    height: 100%;
+    bottom: 0;
+}

@@ -8,34 +8,39 @@ import Chat from "./components/chat/Chat";
 import { getMeWithThunk } from "./redux/actions";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Home from "./components/chat/Home";
+
 const mapStateToProps = state => {
   return {
   user: state.userInfo
   };
 };
+
  const mapDispatchToProps = dispatch => {
   return {
-   /*  setQuery: query => {
-      dispatch(setSearch(query));
-    },    */     
+    getMe: ()=> {
+      dispatch(getMeWithThunk());
+    }     
   };  
 }; 
 
 function App(props) {
  
 useEffect(()=>{
-  getMeWithThunk()
+  props.getMe()
 },[])
 
 
-  return (
-    <Router>
-      {props.user?<NavBar/>:<SplashNavBar />}
+return (
+  <Router>
+      {props.user?._id && <NavBar/>}
+      {!props.user?._id && <SplashNavBar/>}
       <Routes>
-        <Route path="/" exact element={props.user?  <Chat />:<LogIn />} />
+        {props.user?._id && <Route path="/" exact element={<Home/>} />}
+        {!props.user?._id && <Route path="/" exact element={<LogIn />} />}
         {/* <Route path="/new" element={props.user._id? <AnotherPage/>:<LogIn />} /> */}
       </Routes>
-      {props.user && <Footer />}
+      {/* {props.user?._id && <Footer />} */}
     </Router>
   );
 }

@@ -31,7 +31,7 @@ const reducer = (state = initialState, action) => {
       case SET_HISTORY:
         return {
           ...state,
-          chats: action.payload      
+          chats: {...state.chats, list:action.payload}     
         };                
       case NEW_MESSAGE:
         return {

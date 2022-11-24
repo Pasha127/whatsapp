@@ -2,12 +2,26 @@ import React, { useCallback, useState } from "react";
 import { Button, Container, Form, Row,Image } from "react-bootstrap";
 import "./styles.css"
 import {BsFillImageFill,BsPersonBoundingBox } from "react-icons/bs";
+import { connect } from "react-redux";
+import { getMeWithThunk } from "../../redux/actions";
+
+const mapStateToProps = state => {
+  return {
+  user: state.userInfo
+  };
+};
+ const mapDispatchToProps = dispatch => {
+  return {
+    getMe: ()=> {
+      dispatch(getMeWithThunk());
+    }     
+  };  
+}; 
+
 
 const LogIn = (props) => {
     const baseURL = process.env.REACT_APP_SERVER_URL
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -34,7 +48,7 @@ const postAvatar = async (id) =>{
      } 
     } catch (error) {
       console.log(error)
-    }finally{console.log("3 submit-post");}
+    }finally{console.log("submitted avatar");}
   }
 
 const readAvatar = (e)=>{
@@ -59,7 +73,7 @@ const readAvatar = (e)=>{
       }
 }
 
- const postNewAuthor = async (postObj) => {
+ const postNewUser = async (postObj) => {
     const options = {
         
       method: 'POST',
@@ -69,7 +83,7 @@ const readAvatar = (e)=>{
           body: JSON.stringify(postObj)
         
       };
-      const baseEndpoint = `${baseURL}/authors`
+      const baseEndpoint = `${baseURL}/user/register`
     /* console.log("1 submit-post")  */   
       try {
         /* console.log("2 submit-post",baseEndpoint) */        
@@ -78,47 +92,44 @@ const readAvatar = (e)=>{
           const data = await response.json()
           console.log(data._id);
           await postAvatar(data._id)          
-          alert('Successfully posted new article!')
        } else {
          alert('Error fetching results')
        } 
       } catch (error) {
         console.log(error)
-      }finally{console.log("3 submit-post");}
+      }finally{props.getMe()}
     }
 
 
 const handleSubmit = (e) => {
     e.preventDefault()
-    const postObj = {firstName,lastName,username,password,email}
+    const postObj = {username,password,email}
     console.log(postObj);
-    postNewAuthor(postObj);
+    postNewUser(postObj);
   }
 
-const handleLogIn = async (e) =>{ //move whole function  to actions
+const handleLogIn = async (e) =>{ 
     e.preventDefault()
     const postObj = {password,email}
     const options = {        
-        method: 'POST',
+        method: 'PUT',
         credentials:'include',
             headers: {"Content-Type": "application/json",
             },
             body: JSON.stringify(postObj)          
         };
-        const baseEndpoint = `${baseURL}/authors/login`
+        const baseEndpoint = `${baseURL}/user/login`
         try {     
           const response = await fetch(baseEndpoint,options);
           if (response.ok) {           
             const data = await response.json()
-            console.log(data._id); 
-            /* props.setLoggedIn(true)    */  //switch to redux   
-            alert('Successfully logged in!')
+            console.log(data._id);  
          } else {
            alert('Error fetching results')
          } 
         } catch (error) {
           console.log(error)
-        }finally{console.log("3 submit-post");}
+        }finally{props.getMe()}
     
 }
 
@@ -170,15 +181,7 @@ const handleLogIn = async (e) =>{ //move whole function  to actions
                           <input type="file" className="d-none" id="avatarUploadBtn"
                           onChange={(e)=>{readAvatar(e)}}></input>
                           </div>
-                          </div>
-        <Form.Group controlId="First-Name" className="mt-1   col-12">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control size="lg" placeholder="First Name"onChange={(e)=>(setFirstName(e.target.value))} />
-        </Form.Group>         
-        <Form.Group controlId="Last-Name" className="mt-1  col-12">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control size="lg" placeholder="Last Name"onChange={(e)=>(setLastName(e.target.value))} />
-        </Form.Group>         
+                          </div>        
         <Form.Group controlId="Username" className="mt-1 col-12">
           <Form.Label>Username</Form.Label>
           <Form.Control size="lg" placeholder="Username"onChange={(e)=>(setUsername(e.target.value))} />
@@ -210,8 +213,11 @@ const handleLogIn = async (e) =>{ //move whole function  to actions
       </Form>}
     </Container>
     <div className="d-flex flex-wrap justify-content-center mt-5">
-    <a href="http://localhost:3001/user/googleLogin">
+    <a className="background4button" href="http://localhost:3001/user/googleLogin">
     <Button
+            onClick={()=>{
+              props.getMe();
+            }}
             className="oauth-button"
             size="lg"
             variant="outline-dark"            
@@ -226,4 +232,4 @@ const handleLogIn = async (e) =>{ //move whole function  to actions
   );
 };
 
-export default LogIn;
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

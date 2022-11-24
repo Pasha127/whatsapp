@@ -59,11 +59,16 @@
   }
 
   .oauth-button{
-    transform: translateY(40px);
-    background-color: #ffffff;
-    margin-inline: 10px;  
+ 
     height: 50px;
+    z-index: 5;
   }  
+  .background4button{
+    background-color: #ffffff;
+    transform: translateY(40px);
+    border-radius: 8px;
+    
+  }
 
 .register-box{
     border-radius: 10px;

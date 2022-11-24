@@ -35,7 +35,8 @@ export const newMessage = input =>({
     payload: input
 });
 
-export const getMeWithThunk = async () =>{
+
+export const getMeWithThunk = () =>{
   const baseURL = process.env.REACT_APP_SERVER_URL
     const options = {
       method: 'GET' ,
@@ -43,19 +44,23 @@ export const getMeWithThunk = async () =>{
       };      
       const baseEndpoint = `${baseURL}/user/me`
       /* console.log("fetch blogs") */
-      const response = await fetch(baseEndpoint, options);
-      console.log("test me", response);
+
+      return async (dispatch, getState) =>{
+
+        const response = await fetch(baseEndpoint, options);
+        console.log("test get me", response);
       if (response.ok) {
         const data = await response.json()
         console.log("test resp", data);
-        // setUserInfo(data);            
-          } else {
-                    logOutWithThunk()
-            }             
+        dispatch(setUserInfo(data[0]));            
+      } else {
+        dispatch(logOutWithThunk())
+      }             
+    }
 }
 
-export const logOutWithThunk = async () =>{
-  try{
+export const logOutWithThunk = () =>{
+  
   const baseURL = process.env.REACT_APP_SERVER_URL
     const options = {
       method: 'PUT' ,
@@ -66,19 +71,21 @@ export const logOutWithThunk = async () =>{
         } 
       };      
       const baseEndpoint = `${baseURL}/user/logout`
+      return async (dispatch, getState) =>{try{
       const response = await fetch(baseEndpoint, options);
       if (response.ok) {
-        setUserInfo({});
+        dispatch(setUserInfo({}));
       } else {
         console.log("error logging out")
       }
     }catch(error){
       console.log(error)
     }
-    setUserInfo({});            
-}
-export const logInWithThunk = async (email, password) =>{
-  try{
+    dispatch(setUserInfo({}));            
+}}
+
+export const logInWithThunk =  (email, password) =>{
+
   const baseURL = process.env.REACT_APP_SERVER_URL
     const options = {
       method: 'PUT' ,
@@ -89,20 +96,21 @@ export const logInWithThunk = async (email, password) =>{
         body:JSON.stringify({email,password})
       };      
       const baseEndpoint = `${baseURL}/user/login`
+      return async (dispatch, getState) =>{  try{
       const response = await fetch(baseEndpoint, options);
       if (response.ok) {
         const data = await response.json()
-        setUserInfo(data);
+        dispatch(setUserInfo(data));
       } else {
         console.log("error logging out")
       }
     }catch(error){
       console.log(error)
     }
-    setUserInfo({});            
-}
-export const registerWithThunk = async (newUserData) =>{
-  try{
+    dispatch(setUserInfo({}));            
+}}
+export const registerWithThunk =  (newUserData) =>{
+  
   const baseURL = process.env.REACT_APP_SERVER_URL
     const options = {
       method: 'POST' ,
@@ -113,15 +121,36 @@ export const registerWithThunk = async (newUserData) =>{
         body:JSON.stringify(newUserData)
       };      
       const baseEndpoint = `${baseURL}/user/register`
+      return async (dispatch, getState) =>{try{
       const response = await fetch(baseEndpoint, options);
       if (response.ok) {
         const data = await response.json()
-        setUserInfo(data);
+        dispatch(setUserInfo(data));
       } else {
         console.log("error logging out")
       }
     }catch(error){
       console.log(error)
     }
-    setUserInfo({});            
-}
+   dispatch( setUserInfo({}));            
+}}
+
+export const getHistoryWithThunk = () => {
+  const baseURL = process.env.REACT_APP_SERVER_URL
+  const options = {
+      method: 'GET' ,
+      credentials:"include"
+  };      
+  const baseEndpoint = `${baseURL}/chat/me/history`
+  /* console.log("fetch blogs") */
+  return async (dispatch, getState) =>{
+  const response = await fetch(baseEndpoint, options);
+  /* console.log("test get me", response); */
+  if (response.ok) {
+      const data = await response.json()
+      console.log("get all users", data);
+      dispatch(setHistory(data))            
+  } else {
+      console.log("Error - Could not retrieve chats!") 
+  }             
+}}

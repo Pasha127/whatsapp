@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {Container,Row,Col,Form,FormControl,ListGroup,Button} from "react-bootstrap";
 import {io} from "socket.io-client";
-
+import "./styles.css"
 
 const socket = io("https://cog-chat.herokuapp.com/", {transports:["websocket"]})
 console.log()
@@ -49,7 +49,7 @@ const Chat = () => {
 
   return (
     <Container fluid>
-      <Row style={{ height: "95vh" }} className="my-3">
+      <Row style={{ height: "95%" }} className="my-3">
         <Col md={9} className="d-flex flex-column justify-content-between">
           {/* LEFT COLUMN */}
           {/* TOP AREA: USERNAME INPUT FIELD */}

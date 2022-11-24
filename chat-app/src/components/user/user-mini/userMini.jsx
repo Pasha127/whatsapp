@@ -1,8 +1,22 @@
 import React from "react";
 import { Col, Image, Row } from "react-bootstrap";
 import "./styles.css";
+import { connect } from "react-redux";
+const mapStateToProps = state => {
+  return {
+  user: state.userInfo
+  };
+};
+ const mapDispatchToProps = dispatch => {
+  return {
+   /*  getMe: ()=> {
+      dispatch(getMeWithThunk());
+    }      */
+  };  
+}; 
 
-const BlogAuthor = (props) => {
+
+const userMini = (props) => {
   const { name, _id, avatar } = props;
   
   return (
@@ -18,4 +32,4 @@ const BlogAuthor = (props) => {
   );
 };
 
-export default BlogAuthor;
+export default connect(mapStateToProps, mapDispatchToProps)(userMini);
