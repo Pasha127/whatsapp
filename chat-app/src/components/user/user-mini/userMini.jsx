@@ -32,7 +32,8 @@ const UserMini = (props) => {
   
 
   return (
-    <Row className="tab-body m-0">
+    <Row className="tab-body m-0"
+    onClick={()=>{props.getChat(props.person)}}>
       <Col xs={2}>
         <Image className="chat-head" src={props.person.avatar} roundedCircle />
       </Col>

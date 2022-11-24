@@ -5,12 +5,13 @@ import { getMeWithThunk } from "../../redux/actions";
 import { connect } from "react-redux";
 import "./styles.css"
 
-const socket = io("https://cog-chat.herokuapp.com/", {transports:["websocket"]})
+const socket = io("http://localhost:3001", {transports:["websocket"], withCredentials:true})
 console.log()
 
 const mapStateToProps = state => {
   return {
-  user: state.userInfo
+  user: state.userInfo,
+  activeChat: state.chats.active
   };
 };
 
@@ -30,10 +31,19 @@ const Chat = (props) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [chatHistory, setChatHistory] = useState([]);
+  
+  /* console.log("active chat outside socket: ", props.activeChat); */ // okay
+
+  useEffect(()=>{
+    console.log("chatHistory1", chatHistory)
+    setChatHistory(props.activeChat.messages || ['It was null','It was null','It was null','It was null'])
+    console.log("chatHistory2", chatHistory)
+  },[props.activeChat]);
 
   useEffect(() => {
   socket.on("welcome", welcomeMessage => {
-    console.log(welcomeMessage);
+    console.log("active chat in socket: ", props.activeChat);
+/*     console.log(welcomeMessage); */
     submitUsername()
     socket.on("loggedIn", onlineUsersList => {
       console.log("ONLINE USERS: ", onlineUsersList);
@@ -49,7 +59,7 @@ const Chat = (props) => {
         });
       });
     });
-  });
+  }, []);
 
   const submitUsername = () => {
     console.log("SUBMIT", props.user.username)
@@ -89,7 +99,7 @@ const Chat = (props) => {
           {/* MIDDLE AREA: CHAT HISTORY */}
           <ListGroup> {chatHistory.map((element, i) => (
               <ListGroup.Item key={i}>
-                <strong>{element.sender} </strong> | {element.text} at{" "}
+                <strong>{element.sender} </strong> | {element.content.text} at{" "}
                 {new Date(element.createdAt).toLocaleTimeString("en-US")}
               </ListGroup.Item>
             ))}</ListGroup>

@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import { connect } from "react-redux";
 import UserMini from "../user/user-mini/userMini";
 import { useEffect, useState } from "react";
-import { getHistoryWithThunk } from "../../redux/actions";
+import { getChatByIdWithThunk, getHistoryWithThunk } from "../../redux/actions";
 import Chat from "./Chat";
 import "./styles.css"
 
@@ -19,7 +19,11 @@ const mapStateToProps = state => {
     return {
        getHistory: ()=> {
         dispatch(getHistoryWithThunk());
-      }  
+      },
+      getChatById: (id)=> {
+        dispatch(getChatByIdWithThunk(id));
+      }
+        
     };  
 }; 
 
@@ -28,11 +32,23 @@ const mapStateToProps = state => {
 
 
 
+
 const Home = (props) => {
+    const [targetChat, setTargetChat] = useState("");
     
     useEffect(()=>{
       props.getHistory()
     },[])
+
+const getRelevantChatForPerson = (targetPerson) =>{      
+    const relevantChat = props.history.find(chat => {
+        return chat.members.some(member=>{
+          return member._id === targetPerson._id
+        })
+      })  
+      /* console.log("relevantChat:",relevantChat); */
+        props.getChatById(relevantChat._id)
+    }
 
 
     return (
@@ -42,11 +58,11 @@ const Home = (props) => {
             <div className="friendlist">            
                 {props.history.map(chat =>{
                 const person = chat.members.find(member => member._id !== props.user._id) 
-                return (<UserMini key={`${person._id} chat`} person={person} />)}
+                return (<UserMini key={`${person._id} chat`} person={person} getChat={getRelevantChatForPerson} />)}
                 )}  
                 </div>
             <div className="chat-space">
-                <Chat/>
+                <Chat targetChat={targetChat}/>
             </div>
         </div>
        

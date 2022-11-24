@@ -36,6 +36,29 @@ export const newMessage = input =>({
 });
 
 
+export const getChatByIdWithThunk = (id) =>{
+  const baseURL = process.env.REACT_APP_SERVER_URL
+    const options = {
+      method: 'GET' ,
+      credentials:"include"
+      };      
+      const baseEndpoint = `${baseURL}/chat/${id}`
+      /* console.log("fetch blogs") */
+
+      return async (dispatch, getState) =>{
+
+        const response = await fetch(baseEndpoint, options);
+       /*  console.log("get chat by id: ", response); */
+      if (response.ok) {
+        const data = await response.json()
+        console.log("chat from ID: ", data);
+        dispatch(setActiveChat(data));            
+      } else {
+        dispatch(logOutWithThunk())
+      }             
+    }
+}
+
 export const getMeWithThunk = () =>{
   const baseURL = process.env.REACT_APP_SERVER_URL
     const options = {
