@@ -1,12 +1,30 @@
 import { useEffect, useState } from "react";
 import {Container,Row,Col,Form,FormControl,ListGroup,Button} from "react-bootstrap";
 import {io} from "socket.io-client";
+import { getMeWithThunk } from "../../redux/actions";
+import { connect } from "react-redux";
 import "./styles.css"
 
 const socket = io("https://cog-chat.herokuapp.com/", {transports:["websocket"]})
 console.log()
 
-const Chat = () => {
+const mapStateToProps = state => {
+  return {
+  user: state.userInfo
+  };
+};
+
+ const mapDispatchToProps = dispatch => {
+  return {
+    getMe: ()=> {
+      dispatch(getMeWithThunk());
+    }     
+  };  
+}; 
+
+
+
+const Chat = (props) => {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -16,6 +34,7 @@ const Chat = () => {
   useEffect(() => {
   socket.on("welcome", welcomeMessage => {
     console.log(welcomeMessage);
+    submitUsername()
     socket.on("loggedIn", onlineUsersList => {
       console.log("ONLINE USERS: ", onlineUsersList);
       setLoggedIn(true);
@@ -33,8 +52,8 @@ const Chat = () => {
   });
 
   const submitUsername = () => {
-    console.log("SUBMIT")
-    socket.emit("setUsername", { username })
+    console.log("SUBMIT", props.user.username)
+    socket.emit("setUsername", { username: props.user.email.split("@")[0] })
     }
 
   const sendMessage = () => {
@@ -54,18 +73,18 @@ const Chat = () => {
           {/* LEFT COLUMN */}
           {/* TOP AREA: USERNAME INPUT FIELD */}
           {/* {!loggedIn && ( */}
-          <Form
+          {/* <Form
             onSubmit={e => {
               e.preventDefault();
-              submitUsername();
+              handleSearch();
             }}
           >
             <FormControl
-              placeholder="Set your username here"
+              placeholder="Search chat"
               value={username}
               onChange={e => setUsername(e.target.value)}
             />
-          </Form>
+          </Form> */}
           {/* )} */}
           {/* MIDDLE AREA: CHAT HISTORY */}
           <ListGroup> {chatHistory.map((element, i) => (
@@ -105,4 +124,4 @@ const Chat = () => {
   )
 }
 
-export default Chat
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

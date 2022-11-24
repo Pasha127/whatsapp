@@ -7,7 +7,7 @@ export const initialState = {
   query: "",
   userInfo: {
     _id: "",
-    name: "",
+    username: "",
     email: "",
     avatar: ""
 },
