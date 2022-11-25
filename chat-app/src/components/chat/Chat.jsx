@@ -48,16 +48,12 @@ const Chat = (props) => {
   socket.on("welcome", welcomeMessage => {
     console.log("active chat in socket: ", props.activeChat);
 /*     console.log(welcomeMessage); */
-    socket.on("loggedIn", onlineUsersList => {
-      console.log("ONLINE USERS: ", onlineUsersList);
-      setLoggedIn(true);
-      setOnlineUsers(onlineUsersList);
-      
+    
       socket.on("newMessage", receivedMessage => {
         console.log("newMessage ", receivedMessage);
         setChatHistory(chatHistory => [...chatHistory, receivedMessage]);
         });
-      });
+     
     });
     }, []);
 
