@@ -5,6 +5,7 @@ export const SET_CHATS = "SET_CHATS";
 export const SET_ACTIVE_CHAT = "SET_ACTIVE_CHAT";
 export const SET_HISTORY = "SET_HISTORY";
 export const NEW_MESSAGE = "NEW_MESSAGE";
+export const SET_ONLINE = "SET_ONLINE";
 
 export const setLoading =isLoading =>({
     type:LOADING,
@@ -32,6 +33,10 @@ export const setHistory = input =>({
 });
 export const newMessage = input =>({
     type: NEW_MESSAGE,
+    payload: input
+});
+export const setOnline = input =>({
+    type: SET_ONLINE,
     payload: input
 });
 

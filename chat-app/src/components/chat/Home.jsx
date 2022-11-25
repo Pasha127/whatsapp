@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import { connect } from "react-redux";
 import UserMini from "../user/user-mini/userMini";
 import { useEffect, useState } from "react";
-import { getChatByIdWithThunk, getHistoryWithThunk } from "../../redux/actions";
+import { getChatByIdWithThunk, getHistoryWithThunk, setOnline } from "../../redux/actions";
 import Chat from "./Chat";
 import "./styles.css"
 
@@ -11,7 +11,8 @@ import "./styles.css"
 const mapStateToProps = state => {
     return {
     user: state.userInfo,
-    history: state.chats.list
+    history: state.chats.list,
+    onlineUsers: state.onlineUsers
     };
   };
   
@@ -23,7 +24,6 @@ const mapStateToProps = state => {
       getChatById: (id)=> {
         dispatch(getChatByIdWithThunk(id));
       }
-        
     };  
 }; 
 

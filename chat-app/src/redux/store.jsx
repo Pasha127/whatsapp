@@ -14,7 +14,8 @@ export const initialState = {
 chats: {
   active: {}, 
   list: []
-}
+},
+onlineUsers:[]
 
 } 
 

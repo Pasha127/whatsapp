@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import {Container,Row,Col,Form,FormControl,ListGroup,Button} from "react-bootstrap";
 import {io} from "socket.io-client";
-import { getMeWithThunk } from "../../redux/actions";
+import { getMeWithThunk, setOnline } from "../../redux/actions";
 import { connect } from "react-redux";
+
 import "./styles.css"
 
 const socket = io("http://localhost:3001", {transports:["websocket"], withCredentials:true})
@@ -10,7 +11,8 @@ const socket = io("http://localhost:3001", {transports:["websocket"], withCreden
 const mapStateToProps = state => {
   return {
   user: state.userInfo,
-  activeChat: state.chats.active
+  activeChat: state.chats.active,
+  onlineUsers: state.onlineUsers
   };
 };
 
@@ -18,7 +20,11 @@ const mapStateToProps = state => {
   return {
     getMe: ()=> {
       dispatch(getMeWithThunk());
-    }     
+    },
+    setOnlineUsers: (users)=> {
+      dispatch(setOnline(users));
+    }
+           
   };  
 }; 
 
@@ -48,16 +54,17 @@ const Chat = (props) => {
       setOnlineUsers(onlineUsersList);
       
       socket.on("newMessage", receivedMessage => {
-        console.log("new message ", receivedMessage);
-        setChatHistory(chatHistory => [...chatHistory, receivedMessage.message]);
+        console.log("newMessage ", receivedMessage);
+        setChatHistory(chatHistory => [...chatHistory, receivedMessage]);
         });
       });
     });
-  }, []);
+    }, []);
 
   socket.on("listUpdate", onlineUsersList => {
     console.log("New user online");
     setOnlineUsers(onlineUsersList);
+    props.setOnlineUsers(onlineUsersList);
   });
 
   const submitUsername = () => {
@@ -103,8 +110,9 @@ const Chat = (props) => {
           {/* MIDDLE AREA: CHAT HISTORY */}
           <ListGroup> {chatHistory.map((element, i) => (
               <ListGroup.Item key={i}>
-                {/* {console.log(element.content  && element.content.text, "content")} */}
-                <strong>{element.sender} </strong> | {element.content && element.content.text} at{" "}
+                {/*  {console.log(props.activeChat.members.find(user => user._id !== props.user._id), "content")}  */}
+                <strong>{element.sender === props.user._id? props.user.email.split("@")[0]:props.activeChat.members.find(user => user._id !== props.user._id).email.split("@")[0]} 
+                </strong> | {element.content && element.content.text} at{" "}
                 {new Date(element.createdAt).toLocaleTimeString("en-US")}
               </ListGroup.Item>
             ))}</ListGroup>

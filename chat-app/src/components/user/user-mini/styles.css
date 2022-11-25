@@ -10,3 +10,12 @@
   justify-content: left;
   align-items: center;
 }
+.online{
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  transform: translate(25px, -10px);
+  z-index: 1;
+  border-radius: 50%;
+  background-color: greenyellow;
+}
