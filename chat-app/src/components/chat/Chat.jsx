@@ -63,9 +63,14 @@ const Chat = (props) => {
     props.setOnlineUsers(onlineUsersList);
   });
 
+  const joinRoom = () =>{ //trigger with on click in usermini
+    console.log("join: ", props.activeChat._id);
+    socket.emit("joinRoom", {chatRoomId:props.activeChat._id})
+  }
+
   const submitUsername = () => {
     console.log("SUBMIT", props.user.username)
-    socket.emit("setUsername", { username: props.user.email.split("@")[0] })
+    socket.emit("setUsername", {_id: props.user._id, username: props.user.email.split("@")[0] })
     }
 
   const sendMessage = () => {
