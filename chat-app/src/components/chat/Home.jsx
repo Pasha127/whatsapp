@@ -34,7 +34,7 @@ const mapStateToProps = state => {
 
 
 const Home = (props) => {
-    const [targetChat, setTargetChat] = useState("");
+    const [targetChat, setTargetChat] = useState({});
     
     useEffect(()=>{
       props.getHistory()
@@ -47,7 +47,7 @@ const getRelevantChatForPerson = (targetPerson) =>{
         })
       })  
       /* console.log("relevantChat:",relevantChat); */
-        props.getChatById(relevantChat._id)
+        props.getChatById(relevantChat._id);
     }
 
 
@@ -62,7 +62,7 @@ const getRelevantChatForPerson = (targetPerson) =>{
                 )}  
                 </div>
             <div className="chat-space">
-                <Chat targetChat={targetChat}/>
+                <Chat />
             </div>
         </div>
        

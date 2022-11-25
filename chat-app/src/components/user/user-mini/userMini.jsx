@@ -26,7 +26,7 @@ const UserMini = (props) => {
       })
     })
     const messagePreview = relevantChat.messages[relevantChat.messages.length - 1].content.text;
-    console.log("userMini: ", messagePreview)
+   /*  console.log("userMini: ", messagePreview) */
     return messagePreview 
   }
   

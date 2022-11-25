@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import "./styles.css"
 
 const socket = io("http://localhost:3001", {transports:["websocket"], withCredentials:true})
-console.log()
 
 const mapStateToProps = state => {
   return {
@@ -35,24 +34,19 @@ const Chat = (props) => {
   /* console.log("active chat outside socket: ", props.activeChat); */ // okay
 
   useEffect(()=>{
-    console.log("chatHistory1", chatHistory)
     setChatHistory(props.activeChat.messages || ['nodata'])
-    console.log("chatHistory2", chatHistory)
   },[props.activeChat]);
 
   useEffect(() => {
+  submitUsername()
   socket.on("welcome", welcomeMessage => {
     console.log("active chat in socket: ", props.activeChat);
 /*     console.log(welcomeMessage); */
-    submitUsername()
     socket.on("loggedIn", onlineUsersList => {
       console.log("ONLINE USERS: ", onlineUsersList);
       setLoggedIn(true);
       setOnlineUsers(onlineUsersList);
-      socket.on("listUpdate", onlineUsersList => {
-        console.log("New user online");
-        setOnlineUsers(onlineUsersList);
-      });
+      
       socket.on("newMessage", receivedMessage => {
         console.log("new message ", receivedMessage);
         setChatHistory(chatHistory => [...chatHistory, receivedMessage.message]);
@@ -61,19 +55,28 @@ const Chat = (props) => {
     });
   }, []);
 
+  socket.on("listUpdate", onlineUsersList => {
+    console.log("New user online");
+    setOnlineUsers(onlineUsersList);
+  });
+
   const submitUsername = () => {
     console.log("SUBMIT", props.user.username)
     socket.emit("setUsername", { username: props.user.email.split("@")[0] })
     }
 
   const sendMessage = () => {
-    const newMessage= {
-      sender: username,
-      text: message,
-      createdAt: new Date().toLocaleString("en-US"),
+    console.log([props.activeChat.members[0]._id,props.activeChat.members[1]._id])
+    const newMessage= {"members": [props.activeChat.members[0]._id,props.activeChat.members[1]._id],
+    "message":
+        {"sender": props.user._id,
+        "content":{
+            "text":message,
+            "media": "imageURLGoesHere"
+            }
+        }      
     }
     socket.emit("sendMessage", { message: newMessage })
-    setChatHistory([...chatHistory, newMessage])
   }
 
   return (
@@ -99,7 +102,7 @@ const Chat = (props) => {
           {/* MIDDLE AREA: CHAT HISTORY */}
           <ListGroup> {chatHistory.map((element, i) => (
               <ListGroup.Item key={i}>
-                {console.log(element.content  && element.content.text)}
+                {/* {console.log(element.content  && element.content.text, "content")} */}
                 <strong>{element.sender} </strong> | {element.content && element.content.text} at{" "}
                 {new Date(element.createdAt).toLocaleTimeString("en-US")}
               </ListGroup.Item>
@@ -114,7 +117,7 @@ const Chat = (props) => {
             <FormControl
               placeholder="Write your message here"
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={e =>setMessage(e.target.value)}
             />
           </Form>
         </Col>
