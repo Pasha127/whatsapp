@@ -29,12 +29,12 @@ const Chat = (props) => {
   const [message, setMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState(null);
   
   /* console.log("active chat outside socket: ", props.activeChat); */ // okay
 
   useEffect(()=>{
-    setChatHistory(props.activeChat.messages || ['nodata'])
+    setChatHistory(props.activeChat.messages)
   },[props.activeChat]);
 
   useEffect(() => {
@@ -81,7 +81,8 @@ const Chat = (props) => {
 
   return (
     <Container fluid>
-      <Row style={{ height: "95%" }} className="my-3">
+      {!chatHistory && <div className="splash-logo"></div>}
+      {chatHistory && <Row style={{ height: "95%" }} className="my-3">
         <Col md={9} className="d-flex flex-column justify-content-between">
           {/* LEFT COLUMN */}
           {/* TOP AREA: USERNAME INPUT FIELD */}
@@ -133,7 +134,7 @@ const Chat = (props) => {
             ))}
           </ListGroup>
         </Col>
-      </Row>
+      </Row>}
     </Container>
   )
 }
