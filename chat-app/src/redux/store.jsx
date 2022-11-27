@@ -16,7 +16,6 @@ chats: {
   list: []
 },
 onlineUsers:[]
-
 } 
 
 export const store = configureStore({

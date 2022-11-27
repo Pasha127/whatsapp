@@ -21,13 +21,19 @@ const mapStateToProps = state => {
     getMe: ()=> {
       dispatch(getMeWithThunk());
     },
-    setOnlineUsers: (users)=> {
+    setUsersRedux: (users)=> {
       dispatch(setOnline(users));
     }
            
   };  
 }; 
 
+export const joinRoom = (otherId, peopleOnline) =>{ 
+  console.log("person to join: ", otherId);
+  const otherPerson = peopleOnline.find(user=> user._id === otherId)
+  console.log("person socket Id", otherPerson.socketId);
+  socket.emit("joinRoom", {chatRoomId:otherPerson.socketId})
+}
 
 
 const Chat = (props) => {
@@ -36,59 +42,55 @@ const Chat = (props) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [chatHistory, setChatHistory] = useState(null);
-  
+  const {_id,email} = props.user
   /* console.log("active chat outside socket: ", props.activeChat); */ // okay
 
   useEffect(()=>{
+    console.log('fire1')
     setChatHistory(props.activeChat.messages)
   },[props.activeChat]);
 
   useEffect(() => {
-  submitUsername()
-  socket.on("welcome", welcomeMessage => {
-    console.log("active chat in socket: ", props.activeChat);
-/*     console.log(welcomeMessage); */
-    
-      socket.on("newMessage", receivedMessage => {
-        console.log("newMessage ", receivedMessage);
-        setChatHistory(chatHistory => [...chatHistory, receivedMessage]);
-        });
-     
+    console.log('fire2')
+    submitUsername(_id,email)   
+    socket.on("welcome", welcomeMessage => {
+      console.log(welcomeMessage);
+      
     });
-    }, []);
-
-  socket.on("listUpdate", onlineUsersList => {
-    console.log("New user online");
-    setOnlineUsers(onlineUsersList);
-    props.setOnlineUsers(onlineUsersList);
-  });
-
-  const joinRoom = () =>{ //trigger with on click in usermini
-    console.log("join: ", props.activeChat._id);
-    socket.emit("joinRoom", {chatRoomId:props.activeChat._id})
-  }
-
-  const submitUsername = () => {
-    console.log("SUBMIT", props.user.username)
-    socket.emit("setUsername", {_id: props.user._id, username: props.user.email.split("@")[0] })
+  }, []);
+  
+  useEffect(() => {
+    socket.on("newMessage", receivedMessage => {
+      console.log("newMessage ", receivedMessage);
+      setChatHistory(chatHistory => [...chatHistory, {...receivedMessage, createdAt: new Date()}]);
+    });
+    
+    socket.on("listUpdate", onlineUsersList => {
+      console.log("New user online: ", onlineUsersList);
+      setOnlineUsers(onlineUsersList);
+      props.setUsersRedux(onlineUsersList);
+    });
+  }, [socket]);
+    const submitUsername = (userId, emailAddress) => {
+      socket.emit("setUsername", {_id:userId, username: emailAddress.split("@")[0] })
     }
-
-  const sendMessage = () => {
-    console.log([props.activeChat.members[0]._id,props.activeChat.members[1]._id])
-    const newMessage= {"members": [props.activeChat.members[0]._id,props.activeChat.members[1]._id],
-    "message":
-        {"sender": props.user._id,
-        "content":{
-            "text":message,
-            "media": "imageURLGoesHere"
+    
+    const sendMessage = () => {
+      console.log([props.activeChat.members[0]._id,props.activeChat.members[1]._id])
+      const newMessage= {"members": [props.activeChat.members[0]._id,props.activeChat.members[1]._id],
+      "message":
+      {"sender": props.user._id,
+      "content":{
+        "text":message,
+        "media": "imageURLGoesHere"
             }
-        }      
-    }
-    socket.emit("sendMessage", { message: newMessage })
-  }
-
-  return (
-    <Container fluid>
+          }      
+        }
+        socket.emit("sendMessage", { message: newMessage })
+      }
+      
+      return (
+        <Container fluid>
       {!chatHistory && <div className="splash-logo"></div>}
       {chatHistory && <Row style={{ height: "95%" }} className="my-3">
         <Col md={9} className="d-flex flex-column justify-content-between">
@@ -100,7 +102,7 @@ const Chat = (props) => {
               e.preventDefault();
               handleSearch();
             }}
-          >
+            >
             <FormControl
               placeholder="Search chat"
               value={username}

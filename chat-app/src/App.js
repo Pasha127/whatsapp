@@ -28,6 +28,7 @@ function App(props) {
  
 useEffect(()=>{
   props.getMe()
+  console.log('fire4')
 },[])
 
 

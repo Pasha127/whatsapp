@@ -102,7 +102,7 @@ export const logOutWithThunk = () =>{
       return async (dispatch, getState) =>{try{
       const response = await fetch(baseEndpoint, options);
       if (response.ok) {
-        dispatch(setUserInfo({}));
+        
       } else {
         console.log("error logging out")
       }

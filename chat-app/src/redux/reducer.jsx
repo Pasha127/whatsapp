@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
       case SET_ONLINE:
         return {
           ...state,
-          onlineUsers: action.payload       
+          onlineUsers: [...action.payload]       
         };        
      
       default:

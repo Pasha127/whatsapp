@@ -147,15 +147,15 @@ const handleLogIn = async (e) =>{
         <Form>
         <Form.Group controlId="Email" className="mt-1 col-12">
             <Form.Label>Email</Form.Label>
-          <Form.Control size="lg" placeholder="Email"onChange={(e)=>(setEmail(e.target.value))} />
+          <Form.Control size="lg" placeholder="Email"onChange={(e)=>{setEmail(e.target.value)}} />
             </Form.Group>
             <Form.Group controlId="Password" className="mt-1  col-12">
           <Form.Label>Password</Form.Label>
-          <Form.Control size="lg" type="password" placeholder="Password"onChange={(e)=>(setPassword(e.target.value))} />
+          <Form.Control size="lg" type="password" placeholder="Password"onChange={(e)=>{setPassword(e.target.value)}} />
           </Form.Group> 
             <Form.Group className="mt-3  col-12 justify-content-around d-flex">
         <Button variant="outline-dark"
-        onClick={(e) => handleLogIn(e)}
+        onClick={(e) => {handleLogIn(e)}}
         type="submit"
         size="lg"
         >

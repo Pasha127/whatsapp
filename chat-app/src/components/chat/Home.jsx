@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getChatByIdWithThunk, getHistoryWithThunk, setOnline } from "../../redux/actions";
 import Chat from "./Chat";
 import "./styles.css"
+import { Socket } from "socket.io-client";
 
 
 const mapStateToProps = state => {
@@ -39,6 +40,9 @@ const Home = (props) => {
     useEffect(()=>{
       props.getHistory()
     },[])
+    useEffect(()=>{
+      props.getHistory()
+    },[])
 
 const getRelevantChatForPerson = (targetPerson) =>{      
     const relevantChat = props.history.find(chat => {
@@ -54,7 +58,7 @@ const getRelevantChatForPerson = (targetPerson) =>{
     return (
         <Container fluid className="home-container m-0" >
         <div>
-            <div>{console.log(props.history)}</div>
+            {/* <div>{console.log(props.history)}</div> */}
             <div className="friendlist">            
                 {props.history.map(chat =>{
                 const person = chat.members.find(member => member._id !== props.user._id) 
