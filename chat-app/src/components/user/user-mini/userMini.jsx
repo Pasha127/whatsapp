@@ -9,7 +9,7 @@ const mapStateToProps = state => {
   user: state.userInfo,
   history: state.chats.list,
   activeChat: state.chats.active,
-  onlineUsers: state.onlineusers
+  onlineUsers: state.onlineUsers
   };
 };
  const mapDispatchToProps = dispatch => {
@@ -27,7 +27,8 @@ const UserMini = (props) => {
 
   useEffect(()=>{
     console.log("onlineUsers",props.onlineUsers)
-    if(props.onlineUsers?.include(props.person._id)){setIsOnline(true)}else{setIsOnline(false)}
+    const users = props.onlineUsers.map(user => {return(user._id)})
+    if(users.includes(props.person._id)){setIsOnline(true)}else{setIsOnline(false)}
   },[props.onlineUsers, props.person._id])
 
   const chatPreview =() =>{

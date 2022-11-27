@@ -51,6 +51,7 @@ const Chat = (props) => {
   },[props.activeChat]);
 
   useEffect(() => {
+    props.setUsersRedux(["TESING"]);
     console.log('fire2')
     submitUsername(_id,email)   
     socket.on("welcome", welcomeMessage => {
@@ -108,13 +109,13 @@ const Chat = (props) => {
               </Col>}
       {!chatHistory && <div className="splash-logo"></div>}
       {chatHistory && <Row style={{ height: "95%" }} className="my-3">
-        <Col md={12} className="d-flex flex-column justify-content-between">
+        <Col md={12} className="d-flex flex-column justify-content-between pb-5">
           <ListGroup> {chatHistory.map((element, i) => (
               <ListGroup.Item key={i}>
                 <strong>{element.sender === props.user._id? props.user.email.split("@")[0]:props.activeChat.members.find(user => user._id !== props.user._id).email.split("@")[0]} 
                 </strong> | {element.content && element.content.text} at{" "}
                 {new Date(element.createdAt).toLocaleTimeString("en-US")}
-              </ListGroup.Item>
+              </ListGroup.Item>  
             ))}</ListGroup>
 
         </Col>        
