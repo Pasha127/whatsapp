@@ -21,7 +21,7 @@
     display: flex;
     position: absolute;
     border:1px solid grey;
-
+    overflow-y: scroll;
     right:0;
     width: calc(100vw - 249px);
     height: 100%;
@@ -37,4 +37,12 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 30%;
+}
+.chatbar{
+    /* transform: translateX(250px); */
+    display: flex;
+    z-index: 5;
+    bottom: 0px;
+    
+    
 }

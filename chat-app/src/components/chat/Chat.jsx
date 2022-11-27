@@ -91,60 +91,33 @@ const Chat = (props) => {
       
       return (
         <Container fluid>
-      {!chatHistory && <div className="splash-logo"></div>}
-      {chatHistory && <Row style={{ height: "95%" }} className="my-3">
-        <Col md={9} className="d-flex flex-column justify-content-between">
-          {/* LEFT COLUMN */}
-          {/* TOP AREA: USERNAME INPUT FIELD */}
-          {/* {!loggedIn && ( */}
-          {/* <Form
-            onSubmit={e => {
-              e.preventDefault();
-              handleSearch();
-            }}
-            >
-            <FormControl
-              placeholder="Search chat"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-            />
-          </Form> */}
-          {/* )} */}
-          {/* MIDDLE AREA: CHAT HISTORY */}
-          <ListGroup> {chatHistory.map((element, i) => (
-              <ListGroup.Item key={i}>
-                {/*  {console.log(props.activeChat.members.find(user => user._id !== props.user._id), "content")}  */}
-                <strong>{element.sender === props.user._id? props.user.email.split("@")[0]:props.activeChat.members.find(user => user._id !== props.user._id).email.split("@")[0]} 
-                </strong> | {element.content && element.content.text} at{" "}
-                {new Date(element.createdAt).toLocaleTimeString("en-US")}
-              </ListGroup.Item>
-            ))}</ListGroup>
-          {/* BOTTOM AREA: NEW MESSAGE */}
+        {props.activeChat._id && <Col md={12} className={"fixed-bottom pl-0 chatbar"}  >
           <Form
             onSubmit={e => {
               e.preventDefault();
               sendMessage();
             }}
-          >
+            >
             <FormControl
+            style={{width: "100vw"}}
               placeholder="Write your message here"
               value={message}
               onChange={e =>setMessage(e.target.value)}
-            />
+              />
           </Form>
-        </Col>
-        <Col md={3}>
-          {/* ONLINE USERS SECTION */}
-          <div className="mb-3">Connected users:</div>
-          {onlineUsers.length === 0 && (
-            <ListGroup.Item>ERROR - Please Refresh</ListGroup.Item>
-          )}
-          <ListGroup>
-            {onlineUsers.map(user => (
-              <ListGroup.Item key={user.socketId}>{user.username}</ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
+              </Col>}
+      {!chatHistory && <div className="splash-logo"></div>}
+      {chatHistory && <Row style={{ height: "95%" }} className="my-3">
+        <Col md={12} className="d-flex flex-column justify-content-between">
+          <ListGroup> {chatHistory.map((element, i) => (
+              <ListGroup.Item key={i}>
+                <strong>{element.sender === props.user._id? props.user.email.split("@")[0]:props.activeChat.members.find(user => user._id !== props.user._id).email.split("@")[0]} 
+                </strong> | {element.content && element.content.text} at{" "}
+                {new Date(element.createdAt).toLocaleTimeString("en-US")}
+              </ListGroup.Item>
+            ))}</ListGroup>
+
+        </Col>        
       </Row>}
     </Container>
   )
