@@ -21,6 +21,16 @@ const mapStateToProps = state => {
 }; 
 
 
+const JoinRelevantChat = (history, person, onlineUsers)=>{
+  const relevantChat = history.find(chat => {
+    return chat.members.some(member=>{
+      return member._id === person._id
+    })
+  })
+  joinRoom(person._id, onlineUsers, relevantChat)
+ 
+
+}
 const UserMini = (props) => {
 
   const [isOnline, setIsOnline] = useState(false);
@@ -41,11 +51,10 @@ const UserMini = (props) => {
    /*  console.log("userMini: ", messagePreview) */
     return messagePreview 
   }
-  
-
+  let relevantChatVar = null;
   return (
     <Row className="tab-body m-0"
-    onClick={()=>{props.getChat(props.person); joinRoom(props.person._id, props.onlineUsers)}}>
+    onClick={()=>{props.getChat(props.person); JoinRelevantChat(props.history, props.person, props.onlineUsers) }}>
       <Col xs={2}>
         <Image className="chat-head" src={props.person.avatar} roundedCircle />
         {isOnline && <div className="online"></div>}

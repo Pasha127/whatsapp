@@ -28,11 +28,12 @@ const mapStateToProps = state => {
   };  
 }; 
 
-export const joinRoom = (otherId, peopleOnline) =>{ 
+export const joinRoom = (otherId, peopleOnline, relevantChat) =>{ 
   console.log("person to join: ", otherId);
   const otherPerson = peopleOnline.find(user=> user._id === otherId)
-  console.log("person socket Id", otherPerson.socketId);
-  socket.emit("joinRoom", {chatRoomId:otherPerson.socketId})
+  /* console.log("person socket Id", otherPerson.socketId); */
+  const newRoom = otherPerson
+  socket.emit("joinRoom", {chatRoomId:relevantChat._id})
 }
 
 export const sendInitialMessage = (user, otherUser) => {
@@ -84,12 +85,16 @@ const Chat = (props) => {
   
   useEffect(() => {
     socket.on("newMessage", receivedMessage => {
+      console.log("chatHistory: ",chatHistory)
       console.log("newMessage ", receivedMessage);
-      if(chatHistory){
+      const newEntry = {...receivedMessage, createdAt: new Date()}
+      setChatHistory([{...chatHistory,...newEntry}]);
+      
+      /* if(chatHistory){
         setChatHistory(chatHistory => [...chatHistory, {...receivedMessage, createdAt: new Date()}]);
       }else{
         setChatHistory([{...receivedMessage, createdAt: new Date()}]);
-      }
+      } */
     });
     
     socket.on("listUpdate", onlineUsersList => {
