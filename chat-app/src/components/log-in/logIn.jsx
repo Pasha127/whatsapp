@@ -125,7 +125,7 @@ const handleLogIn = async (e) =>{
             const data = await response.json()
             console.log(data._id);  
          } else {
-           alert('Error fetching results')
+           alert('Username, Password or Both Invalid')
          } 
         } catch (error) {
           console.log(error)

@@ -85,7 +85,11 @@ const Chat = (props) => {
   useEffect(() => {
     socket.on("newMessage", receivedMessage => {
       console.log("newMessage ", receivedMessage);
-      setChatHistory(chatHistory => [...chatHistory, {...receivedMessage, createdAt: new Date()}]);
+      if(chatHistory){
+        setChatHistory(chatHistory => [...chatHistory, {...receivedMessage, createdAt: new Date()}]);
+      }else{
+        setChatHistory([{...receivedMessage, createdAt: new Date()}]);
+      }
     });
     
     socket.on("listUpdate", onlineUsersList => {
