@@ -10,7 +10,8 @@ const mapStateToProps = state => {
   user: state.userInfo,
   history: state.chats.list,
   activeChat: state.chats.active,
-  onlineUsers: state.onlineUsers
+  onlineUsers: state.onlineUsers,
+  recentMsg: state.recentMessage
   };
 };
  const mapDispatchToProps = dispatch => {
@@ -31,7 +32,6 @@ const JoinRelevantChat = (history, person)=>{
 }
 
 
-
 const UserMini = (props) => {
   
   const [isOnline, setIsOnline] = useState(false);
@@ -42,6 +42,7 @@ const UserMini = (props) => {
     const users = props.onlineUsers.map(user => {return(user._id)})
     if(users.includes(props.person._id)){setIsOnline(true)}else{setIsOnline(false)}
   },[props.onlineUsers, props.person._id])
+
 
 
   
@@ -62,6 +63,7 @@ const UserMini = (props) => {
  
   useState(()=>{
     setChatPreviewLine(chatPreview())
+    console.log("recent",props.recentMsg)
   })
 
   let relevantChatVar = null;

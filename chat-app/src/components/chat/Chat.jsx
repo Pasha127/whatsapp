@@ -45,7 +45,7 @@ export const emitLogOut = ()=>{
 }
 
 export const sendInitialMessage = (user, otherUser) => {
-  console.log([user,otherUser])
+  console.log("initial members",[user,otherUser])
   socket.emit("setUsername", {_id:user._id, username: user.email.split("@")[0] })
   const newMessage= {
   "members": [user._id,otherUser._id],
@@ -59,9 +59,6 @@ export const sendInitialMessage = (user, otherUser) => {
     }
     socket.emit("sendMessage", { message: newMessage })
   }
-
-
-
 
 
 

@@ -37,9 +37,6 @@ const UsersSidebar = (props) => {
     useEffect(()=>{
       props.getHistory()
     },[])
-    useEffect(()=>{
-      props.getHistory()
-    },[props.recentMsg])
     
 
 const getRelevantChatForPerson = (targetPerson) =>{      

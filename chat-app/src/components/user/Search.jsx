@@ -40,6 +40,8 @@ const handleSearch = async (emailQuery, history, user, onlineUsers) =>{
         const data = await response.json()
         /* console.log("found by Email", data); */
         resultHandler(data, history, user, onlineUsers);                    
+      } else{
+        alert("404 - User Not Found" )
       }          
 }
 
