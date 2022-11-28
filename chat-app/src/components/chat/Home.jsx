@@ -7,7 +7,7 @@ import { getChatByIdWithThunk, getHistoryWithThunk, setOnline } from "../../redu
 import Chat from "./Chat";
 import "./styles.css"
 import { Socket } from "socket.io-client";
-
+import UsersSidebar from "../user/UsersSidebar";
 
 const mapStateToProps = state => {
     return {
@@ -28,48 +28,16 @@ const mapStateToProps = state => {
     };  
 }; 
 
-
-
-
-
-
-
 const Home = (props) => {
-    const [targetChat, setTargetChat] = useState({});
-    
-    useEffect(()=>{
-      props.getHistory()
-    },[])
-    useEffect(()=>{
-      props.getHistory()
-    },[])
-
-const getRelevantChatForPerson = (targetPerson) =>{      
-    const relevantChat = props.history.find(chat => {
-        return chat.members.some(member=>{
-          return member._id === targetPerson._id
-        })
-      })  
-      /* console.log("relevantChat:",relevantChat); */
-        props.getChatById(relevantChat._id);
-    }
-
 
     return (
         <Container fluid className="home-container m-0" >
         <div>
-            {/* <div>{console.log(props.history)}</div> */}
-            <div className="friendlist">            
-                {props.history.map(chat =>{
-                const person = chat.members.find(member => member._id !== props.user._id) 
-                return (<UserMini key={`${person._id} chat`} person={person} getChat={getRelevantChatForPerson} />)}
-                )}  
-                </div>
+            <UsersSidebar/>
             <div className="chat-space">
                 <Chat />
             </div>
-        </div>
-       
+        </div>       
         </Container>
     
     );

@@ -35,6 +35,28 @@ export const joinRoom = (otherId, peopleOnline) =>{
   socket.emit("joinRoom", {chatRoomId:otherPerson.socketId})
 }
 
+export const sendInitialMessage = (user, otherUser) => {
+  console.log([user,otherUser])
+  socket.emit("setUsername", {_id:user._id, username: user.email.split("@")[0] })
+  const newMessage= {
+  "members": [user._id,otherUser._id],
+  "message":
+  {"sender": user,
+  "content":{
+    "text": `${user.email.split("@")[0]} has started a chat with you!`,
+    "media": "imageURLGoesHere"
+        }
+      }      
+    }
+    socket.emit("sendMessage", { message: newMessage })
+  }
+
+
+
+
+
+
+
 
 const Chat = (props) => {
   const [username, setUsername] = useState("");
@@ -78,7 +100,8 @@ const Chat = (props) => {
     
     const sendMessage = () => {
       console.log([props.activeChat.members[0]._id,props.activeChat.members[1]._id])
-      const newMessage= {"members": [props.activeChat.members[0]._id,props.activeChat.members[1]._id],
+      const newMessage= {
+      "members": [props.activeChat.members[0]._id,props.activeChat.members[1]._id],
       "message":
       {"sender": props.user._id,
       "content":{

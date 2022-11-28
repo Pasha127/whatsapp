@@ -9,6 +9,7 @@
   display: flex;
   justify-content: left;
   align-items: center;
+  cursor: pointer;
 }
 .online{
   height: 15px;
@@ -18,4 +19,7 @@
   z-index: 1;
   border-radius: 50%;
   background-color: greenyellow;
+}
+.friendlist{
+  overflow-y:auto;
 }

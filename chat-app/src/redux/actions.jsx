@@ -129,6 +129,7 @@ export const logInWithThunk =  (email, password) =>{
       if (response.ok) {
         const data = await response.json()
         dispatch(setUserInfo(data));
+        getMeWithThunk()
       } else {
         console.log("error logging out")
       }
@@ -159,7 +160,7 @@ export const registerWithThunk =  (newUserData) =>{
       }
     }catch(error){
       console.log(error)
-    }
+    }finally{window.location.reload()}
    dispatch( setUserInfo({}));            
 }}
 

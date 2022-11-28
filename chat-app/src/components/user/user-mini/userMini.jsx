@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Image, Row } from "react-bootstrap";
-import "./styles.css";
+import "../styles.css";
 import { connect } from "react-redux";
 import { joinRoom } from "../../chat/Chat";
 
