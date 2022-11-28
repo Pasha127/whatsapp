@@ -103,14 +103,14 @@ const readAvatar = (e)=>{
 
 const handleSubmit = (e) => {
     e.preventDefault()
-    const postObj = {username,password,email}
-    console.log(postObj);
+    const postObj = {username,password,email:email.toLowerCase()}
+/*     console.log(postObj); */
     postNewUser(postObj);
   }
 
 const handleLogIn = async (e) =>{ 
     e.preventDefault()
-    const postObj = {password,email}
+    const postObj = {password,email:email.toLowerCase()}
     const options = {        
         method: 'PUT',
         credentials:'include',
@@ -123,7 +123,7 @@ const handleLogIn = async (e) =>{
           const response = await fetch(baseEndpoint,options);
           if (response.ok) {           
             const data = await response.json()
-            console.log(data._id);  
+     /*        console.log(data._id);   */
          } else {
            alert('Username, Password or Both Invalid')
          } 

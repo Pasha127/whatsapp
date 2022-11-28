@@ -28,7 +28,7 @@ function App(props) {
  
 useEffect(()=>{
   props.getMe()
-  console.log('fire4')
+ /*  console.log('fire4') */
 },[])
 
 

@@ -10,6 +10,7 @@
   justify-content: left;
   align-items: center;
   cursor: pointer;
+  
 }
 .online{
   height: 15px;
@@ -22,4 +23,10 @@
 }
 .friendlist{
   overflow-y:auto;
+}
+.truncate{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width:170px;
 }

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import {Container,Row,Col,Form,FormControl,ListGroup,Button} from "react-bootstrap";
+import {Container,Row,Col,Form,FormControl,ListGroup,Button, ListGroupItem} from "react-bootstrap";
 import {io} from "socket.io-client";
-import { getMeWithThunk, setOnline } from "../../redux/actions";
+import { getMeWithThunk, setActiveChat, setOnline, setRecentMsg } from "../../redux/actions";
 import { connect } from "react-redux";
 
 import "./styles.css"
+import { useRef } from "react";
 
 const socket = io("http://localhost:3001", {transports:["websocket"], withCredentials:true})
 
@@ -12,7 +13,8 @@ const mapStateToProps = state => {
   return {
   user: state.userInfo,
   activeChat: state.chats.active,
-  onlineUsers: state.onlineUsers
+  onlineUsers: state.onlineUsers,
+  messageHistory: state.chats.active.messages
   };
 };
 
@@ -23,17 +25,23 @@ const mapStateToProps = state => {
     },
     setUsersRedux: (users)=> {
       dispatch(setOnline(users));
-    }
-           
+    },
+    setReduxChatHistory: (chat)=>{
+      dispatch(setActiveChat(chat))
+    },                  
+    setRecentMesg: (chat)=>{
+      dispatch(setRecentMsg(chat))
+    }                  
   };  
 }; 
 
-export const joinRoom = (otherId, peopleOnline, relevantChat) =>{ 
-  console.log("person to join: ", otherId);
-  const otherPerson = peopleOnline.find(user=> user._id === otherId)
-  /* console.log("person socket Id", otherPerson.socketId); */
-  const newRoom = otherPerson
+export const joinRoom = (otherId, relevantChat) =>{ 
+ /*  console.log("person to join: ", otherId); */
   socket.emit("joinRoom", {chatRoomId:relevantChat._id})
+}
+
+export const emitLogOut = ()=>{
+  socket.emit("logOut");
 }
 
 export const sendInitialMessage = (user, otherUser) => {
@@ -60,55 +68,60 @@ export const sendInitialMessage = (user, otherUser) => {
 
 
 const Chat = (props) => {
+  const anchor = useRef(null);
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [chatHistory, setChatHistory] = useState(null);
+  const [chatHistory, setChatHistory] = useState([]);
   const {_id,email} = props.user
   /* console.log("active chat outside socket: ", props.activeChat); */ // okay
 
+
   useEffect(()=>{
-    console.log('fire1')
-    setChatHistory(props.activeChat.messages)
+/*     console.log('fire1', props.activeChat.messages ) */
+    setChatHistory(props.activeChat.messages)    
   },[props.activeChat]);
 
   useEffect(() => {
     props.setUsersRedux(["TESING"]);
-    console.log('fire2')
+/*     console.log('fire2') */
     submitUsername(_id,email)   
     socket.on("welcome", welcomeMessage => {
-      console.log(welcomeMessage);
+   /*    console.log(welcomeMessage); */
       
     });
   }, []);
   
   useEffect(() => {
     socket.on("newMessage", receivedMessage => {
-      console.log("chatHistory: ",chatHistory)
-      console.log("newMessage ", receivedMessage);
+ /*      console.log("chatHistory: ",chatHistory)
+      console.log("StateChatHistory: ",props.messageHistory)
+      console.log("newMessage ", receivedMessage); */
       const newEntry = {...receivedMessage, createdAt: new Date()}
-      setChatHistory([{...chatHistory,...newEntry}]);
-      
-      /* if(chatHistory){
-        setChatHistory(chatHistory => [...chatHistory, {...receivedMessage, createdAt: new Date()}]);
-      }else{
-        setChatHistory([{...receivedMessage, createdAt: new Date()}]);
-      } */
+      setChatHistory(chatHistory =>[...chatHistory,newEntry]);
+      scrollToBottom()
+      props.setRecentMesg(newEntry)
     });
     
     socket.on("listUpdate", onlineUsersList => {
-      console.log("New user online: ", onlineUsersList);
+/*       console.log("New user online: ", onlineUsersList); */
       setOnlineUsers(onlineUsersList);
       props.setUsersRedux(onlineUsersList);
     });
+
+    
   }, [socket]);
+
+    const scrollToBottom = () =>{
+      anchor.current?.scrollIntoView({ behavior: "smooth" })
+    }
+
     const submitUsername = (userId, emailAddress) => {
       socket.emit("setUsername", {_id:userId, username: emailAddress.split("@")[0] })
     }
     
     const sendMessage = () => {
-      console.log([props.activeChat.members[0]._id,props.activeChat.members[1]._id])
       const newMessage= {
       "members": [props.activeChat.members[0]._id,props.activeChat.members[1]._id],
       "message":
@@ -120,6 +133,7 @@ const Chat = (props) => {
           }      
         }
         socket.emit("sendMessage", { message: newMessage })
+        setMessage("")        
       }
       
       return (
@@ -147,8 +161,11 @@ const Chat = (props) => {
                 <strong>{element.sender === props.user._id? props.user.email.split("@")[0]:props.activeChat.members.find(user => user._id !== props.user._id).email.split("@")[0]} 
                 </strong> | {element.content && element.content.text} at{" "}
                 {new Date(element.createdAt).toLocaleTimeString("en-US")}
-              </ListGroup.Item>  
-            ))}</ListGroup>
+              </ListGroup.Item>
+                
+            ))}
+            {<ListGroup.Item ref={anchor} className="invisible mt-2 "/>}
+            </ListGroup>
 
         </Col>        
       </Row>}

@@ -1,3 +1,5 @@
+import { emitLogOut } from "../components/chat/Chat";
+
 export const LOADING = " LOADING";
 export const SEARCH = "SEARCH";
 export const SET_USER_INFO = "SET_USER_INFO";
@@ -6,6 +8,7 @@ export const SET_ACTIVE_CHAT = "SET_ACTIVE_CHAT";
 export const SET_HISTORY = "SET_HISTORY";
 export const NEW_MESSAGE = "NEW_MESSAGE";
 export const SET_ONLINE = "SET_ONLINE";
+export const SET_RECENT_MSG = "SET_RECENT_MSG";
 
 export const setLoading =isLoading =>({
     type:LOADING,
@@ -39,6 +42,10 @@ export const setOnline = input =>({
     type: SET_ONLINE,
     payload: input
 });
+export const setRecentMsg = input =>({
+    type: SET_RECENT_MSG,
+    payload: input
+});
 
 
 export const getChatByIdWithThunk = (id) =>{
@@ -56,7 +63,7 @@ export const getChatByIdWithThunk = (id) =>{
        /*  console.log("get chat by id: ", response); */
       if (response.ok) {
         const data = await response.json()
-        console.log("chat from ID: ", data);
+       /*  console.log("chat from ID: ", data); */
         dispatch(setActiveChat(data));            
       } else {
         dispatch(logOutWithThunk())
@@ -76,10 +83,10 @@ export const getMeWithThunk = () =>{
       return async (dispatch, getState) =>{
 
         const response = await fetch(baseEndpoint, options);
-        console.log("test get me", response);
+       /*  console.log("test get me", response); */
       if (response.ok) {
         const data = await response.json()
-        console.log("test resp", data);
+        /* console.log("test resp", data); */
         dispatch(setUserInfo(data[0]));            
       } else {
         dispatch(logOutWithThunk())
@@ -108,7 +115,8 @@ export const logOutWithThunk = () =>{
       }
     }catch(error){
       console.log(error)
-    }
+    };
+    emitLogOut();
     dispatch(setUserInfo({}));            
 }}
 

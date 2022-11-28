@@ -15,7 +15,8 @@ chats: {
   active: {}, 
   list: []
 },
-onlineUsers:[]
+onlineUsers:[],
+recentMessage:{}
 } 
 
 export const store = configureStore({

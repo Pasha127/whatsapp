@@ -11,7 +11,9 @@ const mapStateToProps = state => {
     return {
     user: state.userInfo,
     history: state.chats.list,
-    onlineUsers: state.onlineUsers
+    activeChat: state.chats.active,
+    onlineUsers: state.onlineUsers,
+    recentMsg: state.recentMessage    
     };
   };
   
@@ -29,14 +31,16 @@ const mapStateToProps = state => {
 
 
 const UsersSidebar = (props) => {
-    const [targetChat, setTargetChat] = useState({});
+    const [activeChatMessages, setActiveChatMessages] = useState({});
+
     
     useEffect(()=>{
       props.getHistory()
     },[])
     useEffect(()=>{
       props.getHistory()
-    },[])
+    },[props.recentMsg])
+    
 
 const getRelevantChatForPerson = (targetPerson) =>{      
     const relevantChat = props.history.find(chat => {
@@ -44,7 +48,6 @@ const getRelevantChatForPerson = (targetPerson) =>{
           return member._id === targetPerson._id
         })
       })  
-      /* console.log("relevantChat:",relevantChat); */
         props.getChatById(relevantChat._id);
     }
 

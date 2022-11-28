@@ -1,5 +1,5 @@
 import { initialState } from "./store";
-import {LOADING,SEARCH,SET_USER_INFO,SET_CHATS,SET_ACTIVE_CHAT,SET_HISTORY,NEW_MESSAGE, SET_ONLINE } from "./actions";
+import {LOADING,SEARCH,SET_USER_INFO,SET_CHATS,SET_ACTIVE_CHAT,SET_HISTORY,NEW_MESSAGE, SET_ONLINE, SET_RECENT_MSG } from "./actions";
 const reducer = (state = initialState, action) => {
     switch (action.type) {
       case LOADING:
@@ -42,6 +42,11 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           onlineUsers: [...action.payload]       
+        };        
+      case SET_RECENT_MSG:
+        return {
+          ...state,
+          recentMessage: action.payload       
         };        
      
       default:
